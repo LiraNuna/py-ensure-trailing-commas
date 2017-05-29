@@ -97,14 +97,9 @@ class MissingTrailingCommaFinder(ast.NodeVisitor):
         )
 
 
-with open('util.py') as file:
-    file_contents = file.read()
-
-    atok = asttokens.ASTTokens(file_contents, parse=True)
+def find_missing_trailing_commas(source_code):
+    atok = asttokens.ASTTokens(source_code, parse=True)
     comma_finder = MissingTrailingCommaFinder(atok)
     comma_finder.visit(atok.tree)
 
-    for index in sorted(comma_finder.insertion_indexes, reverse=True):
-        file_contents = file_contents[:index] + ',' + file_contents[index:]
-
-    print(file_contents)
+    return sorted(comma_finder.insertion_indexes)

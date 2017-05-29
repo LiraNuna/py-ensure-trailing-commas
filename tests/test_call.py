@@ -12,10 +12,32 @@ def test_call():
     """)) == [28]
 
     assert find_missing_trailing_commas(dedent("""
+        function_call(
+            a,
+            b,
+            c=d
+        )
+    """)) == [37]
+
+    assert find_missing_trailing_commas(dedent("""
+        function_call(
+            *args,
+            **kwargs
+        )
+    """)) == [39]
+
+    assert find_missing_trailing_commas(dedent("""
         function_call(a,
                       b
                       )
     """)) == [33]
+
+    assert find_missing_trailing_commas(dedent("""
+        function_call(a,
+                      b,
+                      c=d
+                      )
+    """)) == [52]
 
     assert find_missing_trailing_commas(dedent("""
         function_call(another_call(
@@ -23,6 +45,16 @@ def test_call():
             b
         ))
     """)) == [41]
+
+    assert find_missing_trailing_commas(dedent("""
+        function_call(
+            another_call(
+                a,
+                b=c
+            ),
+            dd=ff
+        )
+    """)) == [56, 73]
 
     assert find_missing_trailing_commas(dedent("""
         obj.method(
@@ -41,12 +73,12 @@ def test_call():
             four(
                 five(
                     seven(
-                        eight
+                        eight=8
                     )
                 )
             )
         )
-    """)) == [56, 128, 142, 152, 158]
+    """)) == [56, 130, 144, 154, 160]
 
 
 def test_decorator_call():

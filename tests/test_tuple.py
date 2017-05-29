@@ -28,6 +28,13 @@ def test_tuple():
     """)) == [15, 34]
 
     assert find_missing_trailing_commas(dedent("""
+        a, b = (
+            1,
+            2
+        )
+    """)) == [22]
+
+    assert find_missing_trailing_commas(dedent("""
         function_call((
             1,
             2,
@@ -124,6 +131,14 @@ def test_no_add_ignore():
     assert find_missing_trailing_commas(dedent("""
         x = (1, 2,
              3, 4)
+    """)) == []
+
+    assert find_missing_trailing_commas(dedent("""
+        a, b = 1, 2
+    """)) == []
+
+    assert find_missing_trailing_commas(dedent("""
+        a, = 1, 2
     """)) == []
 
     assert find_missing_trailing_commas(dedent("""

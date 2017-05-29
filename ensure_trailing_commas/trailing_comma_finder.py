@@ -6,6 +6,13 @@ class MissingTrailingCommaFinder(ast.NodeVisitor):
         self.atok = atok
         self.insertion_indexes = set()
 
+    def skip_newlines(self, token, follower):
+        iter_token = follower(token)
+        while iter_token.string == '\n' and iter_token != token:
+            iter_token = follower(iter_token)
+
+        return iter_token
+
     def until_token_forward(self, token, until):
         token = self.atok.next_token(token, include_extra=True)
         while token.string != until:
@@ -53,10 +60,13 @@ class MissingTrailingCommaFinder(ast.NodeVisitor):
         if not node.elts:
             return
 
-        self.find_trailing_commas(
-            self.until_token_backwards(node.first_token, '('),
-            self.until_token_forward(node.last_token, ')'),
-        )
+        # Tuples are not always enclosed in parens. We should find the first non-newline token to find the parens
+        last_token = self.skip_newlines(node.last_token, self.atok.next_token)
+        if last_token.string != ')':
+            last_token = node.last_token
+
+        # Since we append commas at the end, we don't care about the above point for the starting token
+        self.find_trailing_commas(node.first_token, last_token)
 
     def visit_List(self, node):
         super().generic_visit(node)

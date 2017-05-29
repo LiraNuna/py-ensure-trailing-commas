@@ -13,17 +13,10 @@ class MissingTrailingCommaFinder(ast.NodeVisitor):
 
         return iter_token
 
-    def until_token_forward(self, token, until):
-        token = self.atok.next_token(token, include_extra=True)
+    def until_token(self, token, until, follower):
+        token = follower(token, include_extra=True)
         while token.string != until:
-            token = self.atok.next_token(token, include_extra=True)
-
-        return token
-
-    def until_token_backwards(self, token, until):
-        token = self.atok.prev_token(token, include_extra=True)
-        while token.string != until:
-            token = self.atok.prev_token(token, include_extra=True)
+            token = follower(token, include_extra=True)
 
         return token
 
@@ -92,8 +85,8 @@ class MissingTrailingCommaFinder(ast.NodeVisitor):
             return
 
         self.find_trailing_commas(
-            self.until_token_backwards(argument_list[0].first_token, '('),
-            self.until_token_forward(argument_list[-1].last_token, ')'),
+            self.until_token(argument_list[0].first_token, '(', self.atok.prev_token),
+            self.until_token(argument_list[-1].last_token, ')', self.atok.next_token),
         )
 
     def visit_ClassDef(self, node):
@@ -104,8 +97,8 @@ class MissingTrailingCommaFinder(ast.NodeVisitor):
             return
 
         self.find_trailing_commas(
-            self.until_token_backwards(bases_list[0].first_token, '('),
-            self.until_token_forward(bases_list[-1].last_token, ')'),
+            self.until_token(bases_list[0].first_token, '(', self.atok.prev_token),
+            self.until_token(bases_list[-1].last_token, ')', self.atok.next_token),
         )
 
 

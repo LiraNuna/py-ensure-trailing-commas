@@ -7,12 +7,14 @@ class MissingTrailingCommaFinder(ast.NodeVisitor):
         self.insertion_indexes = set()
 
     def until_token_forward(self, token, until):
+        token = self.atok.next_token(token, include_extra=True)
         while token.string != until:
             token = self.atok.next_token(token, include_extra=True)
 
         return token
 
     def until_token_backwards(self, token, until):
+        token = self.atok.prev_token(token, include_extra=True)
         while token.string != until:
             token = self.atok.prev_token(token, include_extra=True)
 

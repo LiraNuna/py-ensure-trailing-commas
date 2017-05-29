@@ -69,6 +69,14 @@ class MissingTrailingCommaFinder(ast.NodeVisitor):
 
         self.find_trailing_commas(node.first_token, node.last_token)
 
+    def visit_Set(self, node):
+        super().generic_visit(node)
+
+        if not node.elts:
+            return
+
+        self.find_trailing_commas(node.first_token, node.last_token)
+
     def visit_Dict(self, node):
         super().generic_visit(node)
 

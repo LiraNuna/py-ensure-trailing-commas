@@ -14,6 +14,13 @@ def test_classdef():
     assert find_missing_trailing_commas(dedent("""
         class Test(
             a,
+            b  # comment
+        ): pass
+    """)) == [25]
+
+    assert find_missing_trailing_commas(dedent("""
+        class Test(
+            a,
             metaclass=b
         ): pass
     """)) == [35]
@@ -31,6 +38,13 @@ def test_no_add_exists():
         class Test(
             a,
             b,
+        ): pass
+    """)) == []
+
+    assert find_missing_trailing_commas(dedent("""
+        class Test(
+            a,
+            b,  # comment
         ): pass
     """)) == []
 

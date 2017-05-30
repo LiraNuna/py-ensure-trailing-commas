@@ -13,6 +13,13 @@ def test_tuple():
 
     assert find_missing_trailing_commas(dedent("""
         x = {
+            1,
+            2  # comment
+        }
+    """)) == [19]
+
+    assert find_missing_trailing_commas(dedent("""
+        x = {
             1, 2
         }
     """)) == [15]

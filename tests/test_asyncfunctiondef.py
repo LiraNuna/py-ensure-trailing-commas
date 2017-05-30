@@ -42,6 +42,15 @@ def test_functiondef():
         ): pass
     """)) == [64]
 
+    assert find_missing_trailing_commas(dedent("""
+        async def test(
+            a,
+            *args,
+            param=value,
+            **kwargs  # comment
+        ): pass
+    """)) == [64]
+
 
 def test_no_add_exists():
     assert find_missing_trailing_commas(dedent("""
@@ -79,6 +88,15 @@ def test_no_add_exists():
             *args,
             param=value,
             **kwargs,
+        ): pass
+    """)) == []
+
+    assert find_missing_trailing_commas(dedent("""
+        async def test(
+            a,
+            *args,
+            param=value,
+            **kwargs,  # comment
         ): pass
     """)) == []
 

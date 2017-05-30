@@ -34,6 +34,7 @@ class MissingTrailingCommaFinder(ast.NodeVisitor):
             return
 
         *rest, should_be_comma = rest
+        should_be_comma = self.atok.prev_token(self.atok.next_token(should_be_comma))  # Cleans comments
         if should_be_comma.string == ',':
             return
 

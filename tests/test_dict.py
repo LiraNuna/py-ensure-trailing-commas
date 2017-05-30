@@ -13,6 +13,13 @@ def test_dict():
 
     assert find_missing_trailing_commas(dedent("""
         x = {
+            'a': 1,
+            'b': 2  # comment
+        }
+    """)) == [29]
+
+    assert find_missing_trailing_commas(dedent("""
+        x = {
             'a': 1, 'b': 2
         }
     """)) == [25]
@@ -64,6 +71,13 @@ def test_no_add_exists():
         function_call({
             'a': 1,
             'b': 2,
+        })
+    """)) == []
+
+    assert find_missing_trailing_commas(dedent("""
+        function_call({
+            'a': 1,
+            'b': 2,  # comment
         })
     """)) == []
 

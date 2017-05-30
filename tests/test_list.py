@@ -13,6 +13,13 @@ def test_list():
 
     assert find_missing_trailing_commas(dedent("""
         x = [
+            1,
+            2  # comment
+        ]
+    """)) == [19]
+
+    assert find_missing_trailing_commas(dedent("""
+        x = [
             1, 2
         ]
     """)) == [15]
@@ -67,6 +74,13 @@ def test_no_add_exists():
         x = [
             1,
             2,
+        ]
+    """)) == []
+
+    assert find_missing_trailing_commas(dedent("""
+        x = [
+            1,
+            2,  # comment
         ]
     """)) == []
 

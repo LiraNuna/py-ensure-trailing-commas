@@ -55,7 +55,7 @@ class MissingTrailingCommaFinder(ast.NodeVisitor):
 
         # Tuples are not always enclosed in parens. We should find the first non-newline token to find the parens
         last_token = self.skip_newlines(node.last_token, self.atok.next_token)
-        if last_token.string != ')':
+        if last_token.string != ')' and last_token.string != ']':
             last_token = node.last_token
 
         # Since we append commas at the end, we don't care about the above point for the starting token

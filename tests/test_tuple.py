@@ -42,6 +42,13 @@ def test_tuple():
         ))
     """)) == [36]
 
+    assert find_missing_trailing_commas(dedent("""
+        Type[
+            1,
+            2
+        ]
+    """)) == [19]
+
 
 def test_nasted():
     assert find_missing_trailing_commas(dedent("""
@@ -101,6 +108,14 @@ def test_no_add_exists():
         ))
     """)) == []
 
+    assert find_missing_trailing_commas(dedent("""
+        Type[
+            1,
+            2,
+        ]
+    """)) == []
+
+
 
 def test_no_add_ignore():
     assert find_missing_trailing_commas(dedent("""
@@ -147,4 +162,17 @@ def test_no_add_ignore():
 
     assert find_missing_trailing_commas(dedent("""
         function_call((1, 2, 3))
+    """)) == []
+
+    assert find_missing_trailing_commas(dedent("""
+        Type[1]
+    """)) == []
+
+    assert find_missing_trailing_commas(dedent("""
+        Type[1, 2]
+    """)) == []
+
+    assert find_missing_trailing_commas(dedent("""
+        Type[1, 2,
+             3, 4]
     """)) == []

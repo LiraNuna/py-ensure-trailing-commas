@@ -1,0 +1,4 @@
+-   repo: git://github.com/LiraNuna/py-ensure-trailing-commas
+    sha: master
+    hooks:
+    -   id: ensure-trailing-commas

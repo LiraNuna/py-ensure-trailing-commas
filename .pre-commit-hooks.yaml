@@ -1,0 +1,6 @@
+-   id: ensure-trailing-commas
+    name: ensure-trailing-commas
+    description: "Ensures trailing commas are present correctly"
+    entry: ensure-trailing-commas
+    language: python
+    files: \.py$

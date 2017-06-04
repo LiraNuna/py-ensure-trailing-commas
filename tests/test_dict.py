@@ -55,6 +55,19 @@ def test_nasted():
 
 def test_no_add_exists():
     assert find_missing_trailing_commas(dedent("""
+        {
+            1: 1,
+        }
+    """)) == []
+
+    assert find_missing_trailing_commas(dedent("""
+        {
+            1: 1
+            ,
+        }
+    """)) == []
+
+    assert find_missing_trailing_commas(dedent("""
         x = {
             'a': 1,
             'b': 2,

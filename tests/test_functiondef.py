@@ -61,6 +61,13 @@ def test_no_add_exists():
 
     assert find_missing_trailing_commas(dedent("""
         def test(
+            a
+            ,
+        ): pass
+    """)) == []
+
+    assert find_missing_trailing_commas(dedent("""
+        def test(
             a,
             param=value,
         ): pass

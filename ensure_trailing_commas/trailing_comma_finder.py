@@ -26,11 +26,11 @@ class MissingTrailingCommaFinder(ast.NodeVisitor):
 
         start_line, start_column = first_token.start
         end_line, end_column = last_token.end
-        if start_line == end_line:
+        if not rest or start_line == end_line:
             return
 
         *rest, should_be_newline = rest
-        if should_be_newline.string != '\n':
+        if not rest or should_be_newline.string != '\n':
             return
 
         *rest, should_be_comma = rest

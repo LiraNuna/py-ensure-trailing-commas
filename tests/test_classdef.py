@@ -43,6 +43,13 @@ def test_no_add_exists():
 
     assert find_missing_trailing_commas(dedent("""
         class Test(
+            a
+            ,
+        ): pass
+    """)) == []
+
+    assert find_missing_trailing_commas(dedent("""
+        class Test(
             a,
             b,  # comment
         ): pass

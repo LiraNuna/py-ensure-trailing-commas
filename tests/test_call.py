@@ -111,6 +111,13 @@ def test_no_add_exists():
 
     assert find_missing_trailing_commas(dedent("""
         function_call(
+            a
+            ,
+        )
+    """)) == []
+
+    assert find_missing_trailing_commas(dedent("""
+        function_call(
             a,
             b,
             c,

@@ -4,7 +4,8 @@ from ensure_trailing_commas.trailing_comma_finder import find_missing_trailing_c
 
 
 def main():
-    for filename in sys.argv:
+    script_name, *file_names = sys.argv
+    for filename in file_names:
         with open(filename, 'r+') as file:
             file_contents = file.read()
 

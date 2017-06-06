@@ -95,7 +95,14 @@ class MissingTrailingCommaFinder(ast.NodeVisitor):
     def visit_FunctionDef(self, node):
         super().generic_visit(node)
 
-        argument_list = node.args.args
+        arguments = node.args
+        argument_list = arguments.args
+        if arguments.vararg:
+            argument_list.append(arguments.vararg)
+        if arguments.kwonlyargs:
+            argument_list.extend(arguments.kwonlyargs)
+        if arguments.kwarg:
+            argument_list.append(arguments.kwarg)
         if not argument_list:
             return
 

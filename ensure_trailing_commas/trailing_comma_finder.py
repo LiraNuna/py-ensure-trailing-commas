@@ -40,6 +40,12 @@ class MissingTrailingCommaFinder(ast.NodeVisitor):
 
         self.insertion_indexes.add(should_be_comma.endpos)
 
+    def visit(self, node):
+        if not hasattr(node, 'first_token') or not hasattr(node, 'last_token'):
+            return
+
+        super().visit(node)
+
     def visit_Call(self, node):
         super().generic_visit(node)
 

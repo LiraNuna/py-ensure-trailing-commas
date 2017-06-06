@@ -12,6 +12,18 @@ def test_functiondef():
 
     assert find_missing_trailing_commas(dedent("""
         async def test(
+            param=value
+        ): pass
+    """)) == [32]
+
+    assert find_missing_trailing_commas(dedent("""
+        async def test(
+            *args
+        ): pass
+    """)) == [26]
+
+    assert find_missing_trailing_commas(dedent("""
+        async def test(
             a,
             param=value
         ): pass
@@ -24,6 +36,13 @@ def test_functiondef():
             param=value
         ): pass
     """)) == [46]
+
+    assert find_missing_trailing_commas(dedent("""
+        async def test(
+            *,
+            param=value
+        ): pass
+    """)) == [39]
 
     assert find_missing_trailing_commas(dedent("""
         async def test(
@@ -52,6 +71,7 @@ def test_functiondef():
     """)) == [64]
 
 
+
 def test_no_add_exists():
     assert find_missing_trailing_commas(dedent("""
         async def test(
@@ -61,8 +81,13 @@ def test_no_add_exists():
 
     assert find_missing_trailing_commas(dedent("""
         async def test(
-            a
-            ,
+            param=value,
+        ): pass
+    """)) == []
+
+    assert find_missing_trailing_commas(dedent("""
+        async def test(
+            *args,
         ): pass
     """)) == []
 
@@ -76,6 +101,13 @@ def test_no_add_exists():
     assert find_missing_trailing_commas(dedent("""
         async def test(
             a,
+            *,
+            param=value,
+        ): pass
+    """)) == []
+
+    assert find_missing_trailing_commas(dedent("""
+        async def test(
             *,
             param=value,
         ): pass

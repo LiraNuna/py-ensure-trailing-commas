@@ -108,7 +108,7 @@ class MissingTrailingCommaFinder(ast.NodeVisitor):
 
         self.find_trailing_commas(
             self.until_token(argument_list[0].first_token, '(', self.atok.prev_token),
-            self.until_token(argument_list[-1].last_token, ')', self.atok.next_token),
+            self.until_token(node.body[0].first_token, ')', self.atok.prev_token),
         )
 
     def visit_AsyncFunctionDef(self, node):

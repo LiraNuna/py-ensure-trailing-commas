@@ -70,6 +70,24 @@ def test_functiondef():
         ): pass
     """)) == [58]
 
+    assert find_missing_trailing_commas(dedent("""
+        def test(
+            a=((),(),())
+        ): pass
+    """)) == [27]
+
+    assert find_missing_trailing_commas(dedent("""
+        def test(
+            a=b() + c(1) + d()
+        ): pass
+    """)) == [33]
+
+    assert find_missing_trailing_commas(dedent("""
+        def test(
+            a=b[c:d]
+        ): pass
+    """)) == [23]
+
 
 def test_no_add_exists():
     assert find_missing_trailing_commas(dedent("""

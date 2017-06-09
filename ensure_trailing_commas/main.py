@@ -6,7 +6,7 @@ from ensure_trailing_commas.trailing_comma_finder import find_missing_trailing_c
 def main():
     script_name, *file_names = sys.argv
     for filename in file_names:
-        with open(filename, 'r+') as file:
+        with open(filename, 'r+', encoding='utf-8') as file:
             file_contents = file.read()
 
             trailing_comma_indexes = find_missing_trailing_commas(file_contents)

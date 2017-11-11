@@ -1,30 +1,30 @@
 from textwrap import dedent
 
-from ensure_trailing_commas.trailing_comma_finder import find_missing_trailing_commas
+from ensure_trailing_commas.trailing_comma_finder import get_insertion_indexes
 
 
 def test_tuple():
-    assert find_missing_trailing_commas(dedent("""
+    assert get_insertion_indexes(dedent("""
         x = (
             1,
             2
         )
     """)) == [19]
 
-    assert find_missing_trailing_commas(dedent("""
+    assert get_insertion_indexes(dedent("""
         x = (
             1,
             2  # comment
         )
     """)) == [19]
 
-    assert find_missing_trailing_commas(dedent("""
+    assert get_insertion_indexes(dedent("""
         x = (
             1, 2
         )
     """)) == [15]
 
-    assert find_missing_trailing_commas(dedent("""
+    assert get_insertion_indexes(dedent("""
         (
             a,
             b
@@ -34,14 +34,14 @@ def test_tuple():
         )
     """)) == [15, 34]
 
-    assert find_missing_trailing_commas(dedent("""
+    assert get_insertion_indexes(dedent("""
         a, b = (
             1,
             2
         )
     """)) == [22]
 
-    assert find_missing_trailing_commas(dedent("""
+    assert get_insertion_indexes(dedent("""
         function_call((
             1,
             2,
@@ -49,7 +49,7 @@ def test_tuple():
         ))
     """)) == [36]
 
-    assert find_missing_trailing_commas(dedent("""
+    assert get_insertion_indexes(dedent("""
         Type[
             1,
             2
@@ -58,14 +58,14 @@ def test_tuple():
 
 
 def test_nasted():
-    assert find_missing_trailing_commas(dedent("""
+    assert get_insertion_indexes(dedent("""
         x = (
             (1, 2),
             (3, 4)
         )
     """)) == [29]
 
-    assert find_missing_trailing_commas(dedent("""
+    assert get_insertion_indexes(dedent("""
         x = (
                 1,
                 (
@@ -84,27 +84,27 @@ def test_nasted():
 
 
 def test_no_add_exists():
-    assert find_missing_trailing_commas(dedent("""
+    assert get_insertion_indexes(dedent("""
         x = (
             1,
             2,
         )
     """)) == []
 
-    assert find_missing_trailing_commas(dedent("""
+    assert get_insertion_indexes(dedent("""
         x = (
             1, 2,
         )
     """)) == []
 
-    assert find_missing_trailing_commas(dedent("""
+    assert get_insertion_indexes(dedent("""
         x = (
             1
             ,
         )
     """)) == []
 
-    assert find_missing_trailing_commas(dedent("""
+    assert get_insertion_indexes(dedent("""
         (
             a,
             b,
@@ -114,7 +114,7 @@ def test_no_add_exists():
         )
     """)) == []
 
-    assert find_missing_trailing_commas(dedent("""
+    assert get_insertion_indexes(dedent("""
         function_call((
             1,
             2,
@@ -122,7 +122,7 @@ def test_no_add_exists():
         ))
     """)) == []
 
-    assert find_missing_trailing_commas(dedent("""
+    assert get_insertion_indexes(dedent("""
         Type[
             1,
             2,
@@ -132,61 +132,61 @@ def test_no_add_exists():
 
 
 def test_no_add_ignore():
-    assert find_missing_trailing_commas(dedent("""
+    assert get_insertion_indexes(dedent("""
         x = []
     """)) == []
 
-    assert find_missing_trailing_commas(dedent("""
+    assert get_insertion_indexes(dedent("""
         x = (
         )
     """)) == []
 
-    assert find_missing_trailing_commas(dedent("""
+    assert get_insertion_indexes(dedent("""
         x = (
 
         )
     """)) == []
 
-    assert find_missing_trailing_commas(dedent("""
+    assert get_insertion_indexes(dedent("""
         x = (
             # Comment
         )
     """)) == []
 
-    assert find_missing_trailing_commas(dedent("""
+    assert get_insertion_indexes(dedent("""
         x = (1, 2)
     """)) == []
 
-    assert find_missing_trailing_commas(dedent("""
+    assert get_insertion_indexes(dedent("""
         x = (1, 2,
              3, 4)
     """)) == []
 
-    assert find_missing_trailing_commas(dedent("""
+    assert get_insertion_indexes(dedent("""
         a, b = 1, 2
     """)) == []
 
-    assert find_missing_trailing_commas(dedent("""
+    assert get_insertion_indexes(dedent("""
         a, = 1, 2
     """)) == []
 
-    assert find_missing_trailing_commas(dedent("""
+    assert get_insertion_indexes(dedent("""
         (a, b) = (1, 2)
     """)) == []
 
-    assert find_missing_trailing_commas(dedent("""
+    assert get_insertion_indexes(dedent("""
         function_call((1, 2, 3))
     """)) == []
 
-    assert find_missing_trailing_commas(dedent("""
+    assert get_insertion_indexes(dedent("""
         Type[1]
     """)) == []
 
-    assert find_missing_trailing_commas(dedent("""
+    assert get_insertion_indexes(dedent("""
         Type[1, 2]
     """)) == []
 
-    assert find_missing_trailing_commas(dedent("""
+    assert get_insertion_indexes(dedent("""
         Type[1, 2,
              3, 4]
     """)) == []

@@ -4,7 +4,13 @@ import ast, asttokens
 class MissingTrailingCommaFinder(ast.NodeVisitor):
     def __init__(self, atok):
         self.atok = atok
-        self.insertion_indexes = set()
+        self.should_be_commas = set()
+
+    def get_insersion_indexes(self):
+        return sorted(token.endpos for token in self.should_be_commas)
+
+    def get_insersion_coordinates(self):
+        return sorted(token.end for token in self.should_be_commas)
 
     def skip_newlines(self, token, follower):
         iter_token = follower(token)
@@ -38,7 +44,7 @@ class MissingTrailingCommaFinder(ast.NodeVisitor):
         if should_be_comma.string == ',':
             return
 
-        self.insertion_indexes.add(should_be_comma.endpos)
+        self.should_be_commas.add(should_be_comma)
 
     def visit(self, node):
         if not hasattr(node, 'first_token') or not hasattr(node, 'last_token'):
@@ -127,9 +133,13 @@ class MissingTrailingCommaFinder(ast.NodeVisitor):
         )
 
 
-def find_missing_trailing_commas(source_code):
-    atok = asttokens.ASTTokens(source_code, parse=True)
+def find_missing_trailing_commas(source_code, *, filename='<unknown>'):
+    atok = asttokens.ASTTokens(source_code, filename=filename, parse=True)
     comma_finder = MissingTrailingCommaFinder(atok)
     comma_finder.visit(atok.tree)
 
-    return sorted(comma_finder.insertion_indexes)
+    return comma_finder
+
+
+def get_insertion_indexes(source_code):
+    return find_missing_trailing_commas(source_code).get_insersion_indexes()

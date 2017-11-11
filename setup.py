@@ -14,7 +14,7 @@ setup(
         'ensure_trailing_commas',
     ],
     install_requires=[
-        'asttokens>=1.0.0',
+        'asttokens>=1.1.7',
     ],
     entry_points={
         'console_scripts': [

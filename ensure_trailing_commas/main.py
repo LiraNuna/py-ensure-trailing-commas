@@ -9,27 +9,29 @@ def execute(args):
     errors = []
     for file in args.files:
         file_contents = file.read()
-        missing_commas_finder = find_missing_trailing_commas(file_contents, filename=file.name)
 
-        insertion_indexes = missing_commas_finder.get_insersion_indexes()
-        if not insertion_indexes:
-            continue
+        try:
+            missing_commas_finder = find_missing_trailing_commas(file_contents, filename=file.name)
+            insertion_indexes = missing_commas_finder.get_insersion_indexes()
+            if not insertion_indexes:
+                continue
 
-        if args.autofix:
-            for index in reversed(insertion_indexes):
-                file_contents = file_contents[:index] + ',' + file_contents[index:]
+            if args.autofix:
+                for index in reversed(insertion_indexes):
+                    file_contents = file_contents[:index] + ',' + file_contents[index:]
 
-            file.seek(0)
-            file.write(file_contents)
-            file.truncate()
+                file.seek(0)
+                file.write(file_contents)
+                file.truncate()
 
-        for line_number, column in missing_commas_finder.get_insersion_coordinates():
-            errors.append(':'.join((file.name, str(line_number), str(column))))
+            for line_number, column in missing_commas_finder.get_insersion_coordinates():
+                errors.append('missing comma: ' + ':'.join((file.name, str(line_number), str(column))))
+        except SyntaxError as e:
+            errors.append(str(e))
 
-    if not args.silent and errors:
-        print('Missing trailing commas found:')
+    if not args.silent:
         for error in sorted(errors):
-            print('  ', error)
+            print(error)
 
     return len(errors)
 

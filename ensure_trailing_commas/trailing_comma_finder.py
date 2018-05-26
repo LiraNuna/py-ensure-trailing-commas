@@ -58,6 +58,12 @@ class MissingTrailingCommaFinder(ast.NodeVisitor):
         if not node.args and not node.keywords:
             return
 
+        # Generator expressions should not allow trailing comma. A bug in 3.6 allowed it but was fixed in 3.7
+        # This is a special case when the generator is the only argument to the function call and is not surrounded
+        # by parenthesis.
+        if len(node.args) == 1 and isinstance(node.args[0], ast.GeneratorExp):
+            return
+
         self.find_trailing_commas(node.first_token, node.last_token)
 
     def visit_Tuple(self, node):

@@ -72,6 +72,13 @@ def test_call():
 
     assert get_insertion_indexes(dedent("""
         function_call(
+            (1 for _ in range(10)),
+            (2 for _ in range(10))
+        )
+    """)) == [70]
+
+    assert get_insertion_indexes(dedent("""
+        function_call(
             one(
             ),
             two(
@@ -171,5 +178,28 @@ def test_no_add_ignore():
     assert get_insertion_indexes(dedent("""
         function_call(
             # A comment
+        )
+    """)) == []
+
+
+def test_no_add_generator_as_single_param():
+    assert get_insertion_indexes(dedent("""
+        function_call(
+            100 for _ in range(10)
+        )
+    """)) == []
+
+    assert get_insertion_indexes(dedent("""
+        function_call(
+            1 + 1
+            for _ in range(10)
+        )
+    """)) == []
+
+    assert get_insertion_indexes(dedent("""
+        function_call(
+            1 + 1
+            for _ in range(10)
+            if True
         )
     """)) == []
